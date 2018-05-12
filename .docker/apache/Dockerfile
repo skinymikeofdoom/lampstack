@@ -4,14 +4,26 @@ ADD ./vhost.conf /etc/apache2/sites-available/default.conf
 
 RUN chown -R www-data:www-data /var/www/ && a2enmod rewrite && a2ensite default
 
+RUN apt-get update
+RUN apt-get -y install apt-utils
+RUN apt-get -y install git
+RUN apt-get -y install mcrypt
+RUN apt-get -y install zip
+RUN apt-get -y install unzip
+RUN apt-get -y install php-pclzip
+RUN apt-get -y install libpq-dev curl
+RUN apt-get -y install libjpeg-dev
+RUN apt-get -y install libpng12-dev
+RUN apt-get -y install libfreetype6-dev
+RUN apt-get -y install libssl-dev
+RUN apt-get -y install libmcrypt-dev
+RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+RUN rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends git zip
 
-RUN docker-php-ext-install mbstring pdo pdo_mysql
-
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
-RUN php -r "if (hash_file('SHA384', 'composer-setup.php') === '544e09ee996cdf60ece3804abc52599c22b1f40f4323403c44d44fdfdd586475ca9813a858088ffbc1f233e9b180f061') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
-RUN php composer-setup.php
-RUN php -r "unlink('composer-setup.php');"
+RUN curl --silent --show-error https://getcomposer.org/installer | php
 
 WORKDIR /var/www/
 
