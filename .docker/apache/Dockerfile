@@ -17,8 +17,12 @@ RUN apt-get -y install libpng12-dev
 RUN apt-get -y install libfreetype6-dev
 RUN apt-get -y install libssl-dev
 RUN apt-get -y install libmcrypt-dev
+RUN apt-get -y install curl
+RUN apt-get -y install nano
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
-RUN rm -rf /var/lib/apt/lists/*
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends git zip
